@@ -1,0 +1,20 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { SITE_URL } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { breadcrumbSchema } from '../../lib/seo';
+const lang = 'en';
+const code = `<iframe src="${SITE_URL}/embed/self-employed-tax-calculator/" title="Self-employed tax calculator 2026/27" width="100%" height="900" style="border:0;max-width:1000px" loading="lazy"></iframe>`;
+---
+<PageLayout title="Embed the self-employed tax calculator on your website" description="Put the 2026/27 self-employed tax calculator on your own website for free: one iframe, Scotland and student loans included, no sign-up and no tracking, updated with every HMRC change." lang={lang} noindex={true} jsonLd={[breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'Embed', path: route('widget', lang) }])]} breadcrumbs={[{ label: 'Embed' }]} showAuthor={false}>
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold text-navy-900 md:text-4xl">Embed the self-employed tax calculator</h1>
+    <p class="mt-3 text-lg text-navy-700">One line of code for a growth hub, a co-working space, a trade association or a freelance newsletter: visitors type their turnover and see their 2026/27 bill, what to put aside and when Making Tax Digital reaches them.</p>
+  </header>
+  <div class="prose prose-slate max-w-none">
+    <pre class="overflow-x-auto rounded-lg bg-navy-900 p-4 text-sm text-white"><code>{code}</code></pre>
+    <p>Conditions: keep the credit link under the calculator visible and use the widget as it is, with no warranty. When HMRC changes a rate, the embedded calculator follows.</p>
+    <p>Nothing your visitors type reaches us and the iframe sets no cookie. Questions: <a href={route('contact', lang)}>contact</a>.</p>
+  </div>
+  <div class="mt-8 overflow-hidden rounded-xl border border-navy-200"><iframe src="/embed/self-employed-tax-calculator/" title="Self-employed tax calculator 2026/27" width="100%" height="900" style="border:0" loading="lazy"></iframe></div>
+</PageLayout>

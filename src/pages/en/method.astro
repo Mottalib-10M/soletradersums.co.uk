@@ -1,0 +1,52 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { LAST_UPDATED } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { breadcrumbSchema, articleSchema } from '../../lib/seo';
+import { displayDate, formatMoney, formatPercent } from '../../lib/format';
+import { P, type SourceKey } from '../../lib/engine/params';
+import { crossover } from '../../lib/engine/tax';
+import { helpers } from '../../lib/helpers';
+const lang = 'en';
+const m = (n: number) => formatMoney(n, 0);
+const m2 = (n: number) => formatMoney(n, 2);
+const pc = helpers().pc;
+const s = (k: SourceKey) => P.sources[k];
+const L = (k: SourceKey, t?: string) => `<a href="${s(k).url}" target="_blank" rel="nofollow noopener">${t ?? s(k).label.en}</a>`;
+const ruk = P.incomeTax.ruk.bands, sco = P.incomeTax.scotland.bands;
+const x = crossover('ruk');
+---
+<PageLayout title="Self-Employed Tax Method 2026/27: Rules, Sources and Limits" description="How Sole Trader Sums works out a 2026/27 self-employed tax bill: rUK and Scottish Income Tax, Class 4, loans, companies, IR35 and MTD, with sources and limits." lang={lang} jsonLd={[articleSchema({ title: 'How the self-employed tax figures are calculated', description: 'Method of Sole Trader Sums', path: route('method', lang), lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'Method', path: route('method', lang) }])]} breadcrumbs={[{ label: 'Method' }]}>
+  <header class="mb-6"><p class="kicker">Method</p><h1 class="mt-1 text-3xl font-bold text-navy-900 md:text-4xl">How the figures are calculated</h1></header>
+  <div class="prose prose-slate max-w-none">
+    <p>Every calculator on the site calls the same engine, a set of pure functions fed by one parameter file for the tax year {P.taxYearLong}. No figure is typed into a page: when a rate changes, it changes in one place and every page follows. The parameter file was last checked against its sources on {displayDate(P.retrieved_at, 'en-GB')}.</p>
+    <h2>1. Profit</h2>
+    <p>Profit is turnover minus allowable expenses (<Fragment set:html={L('gov_expenses')} />), or turnover minus the {m(P.tradingAllowance.amount)} trading allowance if you choose it (<Fragment set:html={L('gov_trading_allowance')} />); you cannot use both. We assume the cash basis, the default for sole traders (<Fragment set:html={L('gov_cash_basis')} />), and an accounting year that matches the tax year.</p>
+    <h2>2. Income Tax</h2>
+    <p>The Personal Allowance is {m(P.incomeTax.personalAllowance)}, reduced by £1 for every £2 of adjusted net income over {m(P.incomeTax.taperStart)} (<Fragment set:html={L('leg_ita_35')} />). Wages from a job, then profit, use the allowance first; dividends sit on top. In England, Wales and Northern Ireland taxable income is charged at {ruk.map((b) => `${pc(b.rate)} (${b.name.toLowerCase()}${b.upTo ? ` to ${m(b.upTo)} of taxable income` : ' above'})`).join(', ')}. In Scotland non-savings income is charged at {sco.map((b) => `${pc(b.rate)}${b.upTo ? ` to ${m(b.upTo)}` : ' above'}`).join(', ')} of taxable income (<Fragment set:html={L('gov_employers_2627')} />, <Fragment set:html={L('gov_scottish_income_tax')} />). Dividends use UK rates and bands wherever you live: {m(P.dividends.allowance)} at nil, then {pc(P.dividends.basic)}, {pc(P.dividends.higher)} and {pc(P.dividends.additional)} (<Fragment set:html={L('gov_dividends')} />).</p>
+    <p>When you have a job as well, the Self Assessment bill is the Income Tax on all your income minus the Income Tax on the wages alone: that second figure stands for what PAYE took with a standard tax code. A K code, an underpayment collected through your code or a second job changes it.</p>
+    <p>Pension contributions to a relief-at-source scheme lower adjusted net income and earn extra relief through Self Assessment on the top slice of income, at the rate charged on it minus the 20 % added at source (<Fragment set:html={L('gov_pension_relief')} />). We apply this to non-savings income; we do not check the annual allowance or the 100 % of earnings limit.</p>
+    <h2>3. National Insurance</h2>
+    <p>Class 4 is {pc(P.class4.mainRate)} on profit between {m(P.class4.lowerProfitsLimit)} and {m(P.class4.upperProfitsLimit)}, and {pc(P.class4.upperRate)} above (<Fragment set:html={L('gov_se_nic')} />, <Fragment set:html={L('leg_sscba_15')} />). Class 2 is not charged: with profit of {m(P.class2.smallProfitsThreshold)} or more the year is treated as paid, below it you may pay {m2(P.class2.weeklyRate)} a week voluntarily (<Fragment set:html={L('gov_nic_rates')} />). Employee Class 1 on wages and a director's salary is {pc(P.class1.employeeMain)} between {m(P.class1.primaryThreshold)} and {m(P.class1.upperEarningsLimit)}, {pc(P.class1.employeeUpper)} above, on an annual basis; employer Class 1 is {pc(P.class1.employerRate)} above {m(P.class1.secondaryThreshold)}. We do not apply the annual maximum that can limit Class 4 when you also pay Class 1 on a large salary.</p>
+    <h2>4. Student and postgraduate loans</h2>
+    <p>Through Self Assessment HMRC works out the repayment on your income for the whole year, profit plus wages: 9 % above {m(P.studentLoans.plan1)} (Plan 1), {m(P.studentLoans.plan2)} (Plan 2), {m(P.studentLoans.plan4)} (Plan 4) or {m(P.studentLoans.plan5)} (Plan 5), and 6 % above {m(P.studentLoans.postgrad)} for a Postgraduate Loan (<Fragment set:html={L('gov_student_loan_repay')} />). What payroll already took on the wages is deducted. We do not add unearned income such as dividends, and we model one undergraduate plan at a time.</p>
+    <h2>5. Payments on account</h2>
+    <p>Each payment on account is half of last year's Income Tax and Class 4 paid through Self Assessment, loans and capital gains excluded, due on 31 January and 31 July. None is due when that amount is under {m(P.paymentsOnAccount.minBill)} or when more than {pc(P.paymentsOnAccount.atSourceShare)} of your tax was taken at source (<Fragment set:html={L('gov_payments_on_account')} />).</p>
+    <h2>6. Limited company</h2>
+    <p>The company pays Corporation Tax at {pc(P.corporationTax.smallRate)} on profits up to {m(P.corporationTax.lowerLimit)}, {pc(P.corporationTax.mainRate)} from {m(P.corporationTax.upperLimit)}, and in between the main rate less marginal relief of {P.corporationTax.fractionNum}/{P.corporationTax.fractionDen} of the gap to the upper limit, the limits being divided by the number of associated companies plus one and cut for a short period (<Fragment set:html={L('gov_ct_rates_pub')} />, <Fragment set:html={L('leg_cta_18b')} />). We model one director who is the only employee, so the company cannot claim the Employment Allowance (<Fragment set:html={L('gov_employment_allowance')} />). The salary that leaves the director the most is searched on a £50 grid plus the thresholds, with everything left after Corporation Tax paid out as dividends. With the {P.taxYear} dividend rates, a company drawn in full leaves more cash than a sole trader in England, Wales and Northern Ireland only in a narrow band of profit{x ? ` from about ${m(x)}` : ''}; the comparison changes when profit is left in the company, and the chart shows both.</p>
+    <h2>7. IR35 and umbrella companies</h2>
+    <p>Inside IR35 the fee is treated as employment income: the fee-payer deducts Income Tax and employee National Insurance and pays employer National Insurance itself; student loans are repaid through Self Assessment (<Fragment set:html={L('gov_ir35')} />). Through an umbrella, the margin, employer National Insurance and, if passed on, the {pc(P.class1.apprenticeshipLevy)} Apprenticeship Levy come out of the assignment rate before PAYE (<Fragment set:html={L('gov_umbrella')} />). The size test that decides who assesses IR35 uses the Companies Act thresholds described in <Fragment set:html={L('gov_ir35_esm10006a')} />.</p>
+    <h2>8. Making Tax Digital and deadlines</h2>
+    <p>Qualifying income is self-employed turnover plus your share of gross property income, before expenses, year by year: over {P.mtd.stages.map((st) => `${m(st.threshold)} in ${st.basisYear} means MTD from ${displayDate(st.start, 'en-GB')}`).join('; ')} (<Fragment set:html={L('gov_mtd_when')} />, <Fragment set:html={L('gov_mtd_qualifying')} />). Quarterly deadlines and penalties are those of <Fragment set:html={L('gov_mtd_quarterly')} /> and <Fragment set:html={L('gov_mtd_penalties')} />; Self Assessment deadlines and penalties outside MTD those of <Fragment set:html={L('gov_sa_deadlines')} /> and <Fragment set:html={L('gov_sa_penalties')} />.</p>
+    <h2>9. Tests</h2>
+    <p>The engine is tested on every build. Among the cases: GOV.UK's dividend example (wages of £29,570 and dividends of £3,000 give £3,400 and £268.75), its self-employed student loan example (Plan 1 on £42,000 of combined income gives £1,359), HMRC's marginal relief limits for a company with three associated companies (£12,500 and £62,500), the simplified expenses mileage example (11,000 miles give £5,750), the Personal Allowance at £110,000 and £125,140, and the Scottish pension relief of 22 % on income taxed at 42 %. A failing test stops the site from being built.</p>
+    <h2>10. What the calculators do not do</h2>
+    <ul>
+      <li>savings interest, capital gains, the High Income Child Benefit Charge, Marriage Allowance and Gift Aid;</li>
+      <li>losses carried forward, capital allowances on the traditional basis, partnerships and accounting years that do not end on 5 April;</li>
+      <li>a tax code other than the standard one, and the National Insurance annual maximum;</li>
+      <li>for companies: several directors or shareholders, employer pension contributions, the timing of dividends across tax years.</li>
+    </ul>
+    <p>Method version: {LAST_UPDATED}. Questions or a figure that looks wrong: <a href={route('contact', lang)}>contact</a>.</p>
+  </div>
+</PageLayout>

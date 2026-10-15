@@ -1,0 +1,31 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { LAST_UPDATED, AUTHOR_NAME, CONTACT_EMAIL, AUTHOR_ROLE } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { personSchema, organizationSchema, breadcrumbSchema, profilePageSchema } from '../../lib/seo';
+import { displayDate } from '../../lib/format';
+import { PAGES } from '../../lib/guides';
+import { P } from '../../lib/engine/params';
+const lang = 'en';
+const n = PAGES.length + 1;
+const nSrc = Object.keys(P.sources).length;
+---
+<PageLayout title="Sole Trader Sums: who works out these tax figures and how" description="Who publishes Sole Trader Sums, why it gives the 2026/27 self-employed tax bill with no email and no profit cap, and how to report a wrong figure to us." lang={lang} jsonLd={[personSchema(lang), organizationSchema(lang), profilePageSchema({ path: route('about', lang), lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'About', path: route('about', lang) }])]} breadcrumbs={[{ label: 'About' }]}>
+  <header class="mb-6"><p class="kicker">About</p><h1 class="mt-1 text-3xl font-bold text-navy-900 md:text-4xl">Who works out the figures on Sole Trader Sums</h1></header>
+  <div class="prose prose-slate max-w-none">
+    <div class="not-prose mb-6"><p class="text-lg font-semibold text-navy-900">{AUTHOR_NAME}</p><p class="text-navy-700">{AUTHOR_ROLE[lang]}</p></div>
+    <p>Sole Trader Sums is published by Radif Partners, a company that builds free calculators on public rules and public data. This site is for people who work for themselves in the United Kingdom, or are thinking about it: sole traders, freelancers, contractors and directors of one-person companies who want to know what they will owe HMRC for {P.taxYear} and when.</p>
+    <h2>Why another tax calculator</h2>
+    <p>When we looked at what ranks for "self employed tax calculator" and "limited company vs sole trader" in October 2026, we found three kinds of page. Accountancy firms and business banks whose calculator is the front door of a sales funnel, with a phone number beside it, a cap on the profit you can type (one stops at £50,000, exactly where the company question starts to matter) or the details held back until you leave your email. Small calculator sites that still add Class 2 National Insurance, which nobody has had to pay since April 2024, and leave Scotland out. And GOV.UK, which explains every rule but has no tool that puts Income Tax, Class 4, a student loan and the January and July payments together.</p>
+    <p>So this site does the opposite. It gives the whole {P.taxYear} bill at once, in your browser, with no email and no profit cap: Scotland included, Class 4, student loans and payments on account, linked to the date Making Tax Digital reaches you, and the sole trader versus limited company gap across every level of profit rather than at one point.</p>
+    <h2>Where the numbers come from</h2>
+    <p>Every rate, band and threshold sits in one parameter file, each with the GOV.UK, HMRC manual or legislation.gov.uk page it was read on. The file currently cites {nSrc} official pages, all read on {displayDate(P.retrieved_at, 'en-GB')}. The calculations are written once, in a tax engine that every page calls, and tested against the worked examples GOV.UK publishes: the dividend example on the tax-on-dividends page, the self-employed student loan example, HMRC's marginal relief limits, the mileage example of the simplified expenses guide. The <a href={route('method', lang)}>method page</a> lists the rules applied and what the engine leaves out.</p>
+    <h2>What we are not</h2>
+    <p>We are not HMRC, an accountant or a tax adviser, and nothing here is advice on your own affairs. The figures are estimates from the published rules: your Self Assessment calculation, made by HMRC from your return, is the one you pay. We do not know your tax code, your other income or the reliefs you claim unless you type them in. For anything that turns on judgement, such as an IR35 status or whether a cost is allowable, the site explains the rule and points to the official guidance.</p>
+    <h2>How the site is paid for</h2>
+    <p>It is free and needs no account. We sell no accounting package, bank account, software or company formation, we take no commission and we do not link to firms that do. If advertising is added one day, it will never sit above a calculator and it cannot use what you type, because nothing you type leaves your browser.</p>
+    <h2>Tell us when a figure is wrong</h2>
+    <p>HMRC changes guidance during the year and we re-read the sources when it does. If a figure here differs from GOV.UK, write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> with the page and the official link. The <a href={route('editorial', lang)}>editorial policy</a> explains how a correction is made. The site has {n} indexed pages; the full list is in the footer.</p>
+    <p class="text-sm text-navy-600">Sources last read on <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, 'en-GB')}</time>.</p>
+  </div>
+</PageLayout>

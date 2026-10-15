@@ -1,0 +1,26 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import LegalIdentity from '../../components/LegalIdentity.astro';
+import { CONTACT_EMAIL, LAST_UPDATED, LEGAL, SITE_NAMES, SITE_URL } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+const lang = 'en';
+---
+<PageLayout title={`Privacy policy of ${SITE_NAMES[lang]}: your figures stay with you`} description="Privacy policy of Sole Trader Sums: the turnover, wages and loan plan you type never leave your browser, no cookie is set, what hosting logs keep, your rights and how to complain." lang={lang} noindex={true} breadcrumbs={[{ label: 'Privacy' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Privacy policy</h1>
+    <p>This policy covers {SITE_URL}. It follows Articles 12 to 14 of Regulation (EU) 2016/679 (GDPR), which applies to the publisher established in France, and the UK GDPR for visitors in the United Kingdom.</p>
+    <h2>1. Controller</h2>
+    <LegalIdentity lang={lang} />
+    <p>Contact: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. No data protection officer is appointed: the conditions of Article 37 are not met.</p>
+    <h2>2. What the calculators never collect</h2>
+    <p>Your turnover, expenses, wages, dividends, student loan plan, day rate and every other figure are processed <strong>only in your browser</strong>, by code downloaded with the page. They are never sent to us or to anyone else. If you press "copy a link", the figures are written into the page address so that you can come back to them; that address only goes where you send it.</p>
+    <h2>3. Processing that does take place</h2>
+    <h3>Hosting logs</h3><p>The host records IP address, date and time, page requested, browser and referring page, for security and to keep the service running. Legal basis: legitimate interests (Article 6(1)(f)). Retention: under the host's policy.</p>
+    <h3>Cookie-free stability monitoring</h3><p>To find broken pages, the site may use Microsoft Clarity (Microsoft Ireland Operations Limited, Dublin) without cookies: errors, loading times, clicks that lead nowhere and scrolling are measured per page view, with no cookie and no link between visits, page content and inputs masked. Microsoft receives the technical data of the request, including the IP address, keeps recordings for 30 days and aggregated data for up to 13 months. Legal basis: legitimate interest in a site that works (Article 6(1)(f)). You can object by blocking clarity.ms or by writing to us. There is no advertising profile.</p>
+    <h3>Emails</h3><p>If you write to us, your address and message are used to reply and kept for three years after the last exchange. Legal basis: legitimate interests. Please do not send tax identifiers.</p>
+    <h2>4. Recipients and transfers</h2><p>Nobody buys your data. The host, GitHub, Inc., acts as processor (Article 28) and is in the United States; log data may be processed there under the EU-US Data Privacy Framework, its UK extension and standard contractual clauses. The same applies to stability data held by Microsoft Corporation.</p>
+    <h2>5. Your rights</h2><p>Access, rectification, erasure, restriction, objection and portability (Articles 15 to 22): write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>; we answer within a month. You may complain to the {LEGAL.supervisoryAuthority} (<a href={LEGAL.supervisoryAuthorityUrl} rel="nofollow noopener" target="_blank">{LEGAL.supervisoryAuthorityUrl}</a>) or, in the United Kingdom, to the Information Commissioner's Office (<a href="https://ico.org.uk" rel="nofollow noopener" target="_blank">ico.org.uk</a>).</p>
+    <h2>6. No automated decision</h2><p>A result is produced at your request, from what you type, and has no legal effect on you (Article 22).</p>
+    <p>See also <a href={route('cookies', lang)}>cookies</a>. Updated: {LAST_UPDATED}.</p>
+  </div>
+</PageLayout>

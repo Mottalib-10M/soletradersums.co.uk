@@ -1,0 +1,25 @@
+---
+/** Renders one tool with its page defaults. Big tools have their own component; the rest are mini-specs. */
+import SECalc from './calc/SECalc';
+import CompareCalc from './calc/CompareCalc';
+import IR35Calc from './calc/IR35Calc';
+import MTDChecker from './calc/MTDChecker';
+import MiniSim from './calc/MiniSim';
+import { route } from '../i18n/routes';
+import { getSpec } from '../lib/mini-specs';
+import type { ToolDef } from '../lib/guide-types';
+interface Props { tool: ToolDef; primary?: boolean; idPrefix?: string }
+const { tool, primary = false, idPrefix } = Astro.props;
+const props = (tool.props ?? {}) as Record<string, any>;
+const methodHref = route('method', 'en');
+const kind = tool.kind;
+const mini = kind.startsWith('mini:') ? kind.slice(5) : null;
+const spec = mini ? getSpec(mini) : null;
+const href = spec?.ctaPage ? route(spec.ctaPage, 'en') : undefined;
+const numDefaults = Object.fromEntries(Object.entries(props).filter(([, v]) => typeof v === 'number')) as Record<string, number>;
+---
+{kind === 'se' && <SECalc client:load {...props} methodHref={methodHref} mtdHref={route('making-tax-digital', 'en')} poaHref={route('payments-on-account', 'en')} idPrefix={idPrefix ?? 'se'} />}
+{kind === 'compare' && <CompareCalc client:load {...props} methodHref={methodHref} idPrefix={idPrefix ?? 'cmp'} />}
+{kind === 'ir35' && <IR35Calc client:load {...props} methodHref={methodHref} idPrefix={idPrefix ?? 'ir'} />}
+{kind === 'mtd' && <MTDChecker client:load {...props} methodHref={methodHref} idPrefix={idPrefix ?? 'mtd'} />}
+{mini && <MiniSim client:load kind={mini} href={href} defaults={numDefaults} primary={primary} idPrefix={idPrefix ?? (primary ? 'p' : 'm')} />}

@@ -1,0 +1,22 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import LegalIdentity from '../../components/LegalIdentity.astro';
+import { CONTACT_EMAIL, LAST_UPDATED, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+const lang = 'en';
+---
+<PageLayout title={`Contact ${SITE_NAMES[lang]}: report a figure, ask for a tool`} description="Write to Sole Trader Sums about a tax figure that differs from GOV.UK, a rule the calculators should handle, or the free calculator to embed on your own website or newsletter." lang={lang} noindex={true} breadcrumbs={[{ label: 'Contact' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Contact</h1>
+    <p>Email: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Every message is read by a person.</p>
+    <h2>A figure looks wrong</h2>
+    <p>Send the page address, what you typed and the GOV.UK or HMRC page that gives another figure. Mid-year changes do happen: in 2026 the simplified mileage rate moved to 55p for the first 10,000 miles and HMRC corrected its Making Tax Digital penalty table after publishing it. A correction goes live with the date of the new reading.</p>
+    <h2>We cannot look at your tax affairs</h2>
+    <p>Please do not send your UTR, National Insurance number or tax return. We cannot advise on a personal case, contact HMRC for you or tell you whether a contract is inside IR35. For that, the place to go is HMRC's helplines, a chartered tax adviser or, if your income is low, the charity TaxAid.</p>
+    <h2>A calculator for your own website</h2>
+    <p>Business support services, co-working spaces and freelance newsletters can show the self-employed tax calculator in an iframe at no cost: the code is on the <a href={route('widget', lang)}>embed page</a>.</p>
+    <h2>Publisher</h2>
+    <LegalIdentity lang={lang} />
+    <p>Updated: {LAST_UPDATED}.</p>
+  </div>
+</PageLayout>

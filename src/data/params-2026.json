@@ -1,0 +1,657 @@
+{
+  "_lisezmoi": "Every statutory figure of the site lives here, never in a page or a component (RECETTE §4, §22). Tax year 2026/27 = 6 April 2026 to 5 April 2027. Each value was read on the source named in `src` on `retrieved_at`. Next year: copy to params-2027.json, re-read every source, update the tests.",
+  "year": 2026,
+  "taxYear": "2026/27",
+  "taxYearLong": "6 April 2026 to 5 April 2027",
+  "retrieved_at": "2026-10-15",
+  "valid_from": "2026-04-06",
+  "valid_to": "2027-04-05",
+  "incomeTax": {
+    "src": "gov_income_tax_rates",
+    "personalAllowance": 12570,
+    "taperStart": 100000,
+    "taperRate": 0.5,
+    "ruk": {
+      "src": "gov_employers_2627",
+      "bands": [
+        {
+          "name": "Basic rate",
+          "rate": 0.2,
+          "upTo": 37700
+        },
+        {
+          "name": "Higher rate",
+          "rate": 0.4,
+          "upTo": 125140
+        },
+        {
+          "name": "Additional rate",
+          "rate": 0.45,
+          "upTo": null
+        }
+      ]
+    },
+    "scotland": {
+      "src": "gov_scottish_income_tax",
+      "bands": [
+        {
+          "name": "Starter rate",
+          "rate": 0.19,
+          "upTo": 3967
+        },
+        {
+          "name": "Basic rate",
+          "rate": 0.2,
+          "upTo": 16956
+        },
+        {
+          "name": "Intermediate rate",
+          "rate": 0.21,
+          "upTo": 31092
+        },
+        {
+          "name": "Higher rate",
+          "rate": 0.42,
+          "upTo": 62430
+        },
+        {
+          "name": "Advanced rate",
+          "rate": 0.45,
+          "upTo": 125140
+        },
+        {
+          "name": "Top rate",
+          "rate": 0.48,
+          "upTo": null
+        }
+      ]
+    }
+  },
+  "dividends": {
+    "src": "gov_dividends",
+    "allowance": 500,
+    "basic": 0.1075,
+    "higher": 0.3575,
+    "additional": 0.3935
+  },
+  "class4": {
+    "src": "gov_se_nic",
+    "lowerProfitsLimit": 12570,
+    "upperProfitsLimit": 50270,
+    "mainRate": 0.06,
+    "upperRate": 0.02
+  },
+  "class2": {
+    "src": "gov_nic_rates",
+    "smallProfitsThreshold": 7105,
+    "weeklyRate": 3.65,
+    "weeks": 52
+  },
+  "class1": {
+    "src": "gov_employers_2627",
+    "lowerEarningsLimit": 6708,
+    "primaryThreshold": 12570,
+    "upperEarningsLimit": 50270,
+    "employeeMain": 0.08,
+    "employeeUpper": 0.02,
+    "secondaryThreshold": 5000,
+    "employerRate": 0.15,
+    "employmentAllowance": 10500,
+    "apprenticeshipLevy": 0.005,
+    "apprenticeshipLevyAllowance": 15000
+  },
+  "studentLoans": {
+    "src": "gov_student_loan_repay",
+    "plan1": 26900,
+    "plan2": 29385,
+    "plan4": 33795,
+    "plan5": 25000,
+    "postgrad": 21000,
+    "rate": 0.09,
+    "postgradRate": 0.06
+  },
+  "corporationTax": {
+    "src": "gov_ct_rates_pub",
+    "smallRate": 0.19,
+    "mainRate": 0.25,
+    "lowerLimit": 50000,
+    "upperLimit": 250000,
+    "fractionNum": 3,
+    "fractionDen": 200
+  },
+  "tradingAllowance": {
+    "src": "gov_trading_allowance",
+    "amount": 1000,
+    "otherIncomeContact": 2500
+  },
+  "vat": {
+    "src": "gov_vat_registration",
+    "threshold": 90000,
+    "daysToRegister": 30
+  },
+  "simplified": {
+    "src": "gov_simplified_vehicles",
+    "carFirst10k": 0.55,
+    "carFirst10kBefore": 0.45,
+    "carAfter10k": 0.25,
+    "motorcycle": 0.24,
+    "milesBand": 10000,
+    "home": [
+      {
+        "from": 25,
+        "to": 50,
+        "perMonth": 10
+      },
+      {
+        "from": 51,
+        "to": 100,
+        "perMonth": 18
+      },
+      {
+        "from": 101,
+        "to": null,
+        "perMonth": 26
+      }
+    ],
+    "homeSrc": "gov_simplified_home"
+  },
+  "paymentsOnAccount": {
+    "src": "gov_payments_on_account",
+    "minBill": 1000,
+    "atSourceShare": 0.8,
+    "dueFirst": "31 January",
+    "dueSecond": "31 July"
+  },
+  "selfAssessment": {
+    "src": "gov_sa_deadlines",
+    "registerBy": "5 October",
+    "paperDeadline": "2026-10-31",
+    "onlineDeadline": "2027-01-31",
+    "paymentDeadline": "2027-01-31",
+    "codingOutDeadline": "2026-12-30",
+    "penalties": {
+      "src": "gov_sa_penalties",
+      "initial": 100,
+      "dailyFromMonth": 3,
+      "daily": 10,
+      "dailyMax": 900,
+      "sixMonthMin": 300,
+      "sixMonthRate": 0.05,
+      "twelveMonthMin": 300,
+      "twelveMonthRate": 0.05,
+      "latePaymentRate": 0.05
+    }
+  },
+  "mtd": {
+    "src": "gov_mtd_when",
+    "stages": [
+      {
+        "basisYear": "2024/25",
+        "threshold": 50000,
+        "start": "2026-04-06"
+      },
+      {
+        "basisYear": "2025/26",
+        "threshold": 30000,
+        "start": "2027-04-06"
+      },
+      {
+        "basisYear": "2026/27",
+        "threshold": 20000,
+        "start": "2028-04-06"
+      }
+    ],
+    "quarters": [
+      {
+        "standard": "6 April to 5 July",
+        "calendar": "1 April to 30 June",
+        "deadline": "7 August"
+      },
+      {
+        "standard": "6 April to 5 October",
+        "calendar": "1 April to 30 September",
+        "deadline": "7 November"
+      },
+      {
+        "standard": "6 April to 5 January",
+        "calendar": "1 April to 31 December",
+        "deadline": "7 February"
+      },
+      {
+        "standard": "6 April to 5 April",
+        "calendar": "1 April to 31 March",
+        "deadline": "7 May"
+      }
+    ],
+    "quarterlySrc": "gov_mtd_quarterly",
+    "optOutYears": 3,
+    "earlySendDays": 10,
+    "penalties": {
+      "src": "gov_mtd_penalties",
+      "pointThreshold": 4,
+      "pointThresholdExempt": 2,
+      "submissionPenalty": 200,
+      "pointExpiryMonths": 24,
+      "noQuarterlyPointsYear": "2026/27",
+      "y2627": {
+        "day15": 0.03,
+        "day30": 0.03
+      },
+      "y2728": {
+        "day15": 0.04,
+        "day30": 0.04
+      },
+      "annualRate": 0.1,
+      "annualMaxYears": 2,
+      "firstYearGraceDays": 30,
+      "graceDays": 15
+    }
+  },
+  "ir35": {
+    "src": "gov_ir35_esm10006a",
+    "turnoverOld": 10200000,
+    "balanceOld": 5100000,
+    "turnoverNew": 15000000,
+    "balanceNew": 7500000,
+    "employees": 50
+  },
+  "pension": {
+    "src": "gov_pension_relief",
+    "basicRelief": 0.2,
+    "noEarningsMax": 2880
+  },
+  "interest": {
+    "src": "gov_hmrc_interest",
+    "latePaymentMarginOverBase": 0.04
+  },
+  "hicbc": {
+    "src": "gov_hicbc",
+    "start": 60000,
+    "end": 80000,
+    "stepPerPercent": 200,
+    "eldestWeekly": 27.05,
+    "otherWeekly": 17.9,
+    "weeks": 52,
+    "ratesSrc": "gov_child_benefit"
+  },
+  "sources": {
+    "gov_income_tax_rates": {
+      "url": "https://www.gov.uk/income-tax-rates",
+      "label": {
+        "en": "GOV.UK, Income Tax rates and Personal Allowances (2026 to 2027)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_scottish_income_tax": {
+      "url": "https://www.gov.uk/scottish-income-tax",
+      "label": {
+        "en": "GOV.UK, Income Tax in Scotland: 2026 to 2027 rates"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "mygov_scot": {
+      "url": "https://www.mygov.scot/scottish-income-tax",
+      "label": {
+        "en": "mygov.scot (Scottish Government), Scottish Income Tax, current rates 6 April 2026 to 5 April 2027"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_employers_2627": {
+      "url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
+      "label": {
+        "en": "HMRC, Rates and thresholds for employers 2026 to 2027"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_se_nic": {
+      "url": "https://www.gov.uk/self-employed-national-insurance-rates",
+      "label": {
+        "en": "GOV.UK, Self-employed National Insurance rates (Class 2 and Class 4, 2026 to 2027)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_nic_rates": {
+      "url": "https://www.gov.uk/government/publications/rates-and-allowances-national-insurance-contributions/rates-and-allowances-national-insurance-contributions",
+      "label": {
+        "en": "HMRC, Rates and allowances: National Insurance contributions"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_dividends": {
+      "url": "https://www.gov.uk/tax-on-dividends",
+      "label": {
+        "en": "GOV.UK, Tax on dividends (rates from 6 April 2026)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_ct_rates_pub": {
+      "url": "https://www.gov.uk/government/publications/rates-and-allowances-corporation-tax/rates-and-allowances-corporation-tax",
+      "label": {
+        "en": "HMRC, Corporation Tax rates and allowances (financial year 2026)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "leg_cta_18b": {
+      "url": "https://www.legislation.gov.uk/ukpga/2010/4/section/18B",
+      "label": {
+        "en": "Corporation Tax Act 2010, section 18B (marginal relief)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_student_loan_repay": {
+      "url": "https://www.gov.uk/repaying-your-student-loan/what-you-pay",
+      "label": {
+        "en": "GOV.UK, Repaying your student loan: how much you repay"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_trading_allowance": {
+      "url": "https://www.gov.uk/guidance/tax-free-allowances-on-property-and-trading-income",
+      "label": {
+        "en": "HMRC, Tax-free allowances on property and trading income"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "leg_ittoia_783a": {
+      "url": "https://www.legislation.gov.uk/ukpga/2005/5/section/783A",
+      "label": {
+        "en": "Income Tax (Trading and Other Income) Act 2005, section 783A (trading allowance)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_vat_registration": {
+      "url": "https://www.gov.uk/vat-registration/when-to-register",
+      "label": {
+        "en": "GOV.UK, VAT registration: when to register"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_simplified_vehicles": {
+      "url": "https://www.gov.uk/simpler-income-tax-simplified-expenses/vehicles",
+      "label": {
+        "en": "GOV.UK, Simplified expenses: vehicles (rates for 2026 to 2027)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_simplified_home": {
+      "url": "https://www.gov.uk/simpler-income-tax-simplified-expenses/working-from-home",
+      "label": {
+        "en": "GOV.UK, Simplified expenses: working from home"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_expenses": {
+      "url": "https://www.gov.uk/expenses-if-youre-self-employed",
+      "label": {
+        "en": "GOV.UK, Expenses if you're self-employed"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_cash_basis": {
+      "url": "https://www.gov.uk/simpler-income-tax-cash-basis",
+      "label": {
+        "en": "GOV.UK, Cash basis"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_payments_on_account": {
+      "url": "https://www.gov.uk/understand-self-assessment-bill/payments-on-account",
+      "label": {
+        "en": "GOV.UK, Understand your Self Assessment bill: payments on account"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_sa_deadlines": {
+      "url": "https://www.gov.uk/self-assessment-tax-returns/deadlines",
+      "label": {
+        "en": "GOV.UK, Self Assessment tax returns: deadlines"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_sa_penalties": {
+      "url": "https://www.gov.uk/self-assessment-tax-returns/penalties",
+      "label": {
+        "en": "GOV.UK, Self Assessment tax returns: penalties"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_register_se": {
+      "url": "https://www.gov.uk/register-for-self-assessment/self-employed",
+      "label": {
+        "en": "GOV.UK, Check how to register for Self Assessment"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_set_up_sole_trader": {
+      "url": "https://www.gov.uk/set-up-sole-trader",
+      "label": {
+        "en": "GOV.UK, Set up as a sole trader"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_mtd_when": {
+      "url": "https://www.gov.uk/guidance/check-if-youre-eligible-for-making-tax-digital-for-income-tax",
+      "label": {
+        "en": "HMRC, Find out if and when you need to use Making Tax Digital for Income Tax (updated 26 March 2026)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_mtd_qualifying": {
+      "url": "https://www.gov.uk/guidance/work-out-your-qualifying-income-for-making-tax-digital-for-income-tax",
+      "label": {
+        "en": "HMRC, Work out your qualifying income for Making Tax Digital for Income Tax"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_mtd_quarterly": {
+      "url": "https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax/send-quarterly-updates",
+      "label": {
+        "en": "HMRC, Use Making Tax Digital for Income Tax: send quarterly updates"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_mtd_overview": {
+      "url": "https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax/before-you-use-this-guide",
+      "label": {
+        "en": "HMRC, Use Making Tax Digital for Income Tax: before you use this guide"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_mtd_penalties": {
+      "url": "https://www.gov.uk/guidance/penalties-for-making-tax-digital-for-income-tax",
+      "label": {
+        "en": "HMRC, Penalties for Making Tax Digital for Income Tax (updated 30 March 2026)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_mtd_exempt": {
+      "url": "https://www.gov.uk/guidance/find-out-if-you-can-get-an-exemption-from-making-tax-digital-for-income-tax",
+      "label": {
+        "en": "HMRC, Find out if you can get an exemption from Making Tax Digital for Income Tax"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_mtd_software": {
+      "url": "https://www.gov.uk/guidance/choose-the-right-software-for-making-tax-digital-for-income-tax",
+      "label": {
+        "en": "HMRC, Choose the right software for Making Tax Digital for Income Tax"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_ir35": {
+      "url": "https://www.gov.uk/guidance/understanding-off-payroll-working-ir35",
+      "label": {
+        "en": "HMRC, Understanding off-payroll working (IR35)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_ir35_esm10006a": {
+      "url": "https://www.gov.uk/hmrc-internal-manuals/employment-status-manual/esm10006a",
+      "label": {
+        "en": "HMRC Employment Status Manual ESM10006A, size thresholds from 6 April 2025"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "leg_itepa_ch10": {
+      "url": "https://www.legislation.gov.uk/ukpga/2003/1/part/2/chapter/10",
+      "label": {
+        "en": "Income Tax (Earnings and Pensions) Act 2003, Part 2 Chapter 10 (off-payroll working)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_umbrella": {
+      "url": "https://www.gov.uk/guidance/working-through-an-umbrella-company",
+      "label": {
+        "en": "GOV.UK, Working through an umbrella company"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_umbrella_2026": {
+      "url": "https://www.gov.uk/guidance/paye-rules-for-labour-supply-chains-that-include-umbrella-companies-from-6-april-2026",
+      "label": {
+        "en": "HMRC, PAYE rules for labour supply chains that include umbrella companies from 6 April 2026"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_employment_allowance": {
+      "url": "https://www.gov.uk/claim-employment-allowance/eligibility",
+      "label": {
+        "en": "GOV.UK, Employment Allowance: eligibility"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_pension_relief": {
+      "url": "https://www.gov.uk/tax-on-your-private-pension/pension-tax-relief",
+      "label": {
+        "en": "GOV.UK, Tax on your private pension contributions: tax relief"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_hmrc_interest": {
+      "url": "https://www.gov.uk/government/publications/rates-and-allowances-hmrc-interest-rates-for-late-and-early-payments/rates-and-allowances-hmrc-interest-rates",
+      "label": {
+        "en": "HMRC interest rates for late and early payments"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "leg_ita_35": {
+      "url": "https://www.legislation.gov.uk/ukpga/2007/3/section/35",
+      "label": {
+        "en": "Income Tax Act 2007, section 35 (personal allowance reduction)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "leg_sscba_15": {
+      "url": "https://www.legislation.gov.uk/ukpga/1992/4/section/15",
+      "label": {
+        "en": "Social Security Contributions and Benefits Act 1992, section 15 (Class 4)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_hicbc": {
+      "url": "https://www.gov.uk/child-benefit-tax-charge",
+      "label": {
+        "en": "GOV.UK, High Income Child Benefit Charge"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_child_benefit": {
+      "url": "https://www.gov.uk/child-benefit/what-youll-get",
+      "label": {
+        "en": "GOV.UK, Child Benefit: what you'll get"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_find_utr": {
+      "url": "https://www.gov.uk/find-utr-number",
+      "label": {
+        "en": "GOV.UK, Find a lost UTR number"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_sa302": {
+      "url": "https://www.gov.uk/understand-self-assessment-bill/tax-calculation-sa302",
+      "label": {
+        "en": "GOV.UK, Understand your Self Assessment bill: tax calculation (SA302)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_sa_corrections": {
+      "url": "https://www.gov.uk/self-assessment-tax-returns/corrections",
+      "label": {
+        "en": "GOV.UK, Self Assessment tax returns: if you need to change your return"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_sa_refund": {
+      "url": "https://www.gov.uk/self-assessment-tax-returns/claiming-a-tax-refund",
+      "label": {
+        "en": "GOV.UK, Self Assessment tax returns: claiming a tax refund"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_records": {
+      "url": "https://www.gov.uk/self-employed-records/how-long-to-keep-your-records",
+      "label": {
+        "en": "GOV.UK, Business records if you're self-employed: how long to keep them"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_voluntary_nic": {
+      "url": "https://www.gov.uk/voluntary-national-insurance-contributions/who-can-pay-voluntary-contributions",
+      "label": {
+        "en": "GOV.UK, Voluntary National Insurance: who can pay"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_state_pension": {
+      "url": "https://www.gov.uk/new-state-pension/eligibility",
+      "label": {
+        "en": "GOV.UK, The new State Pension: eligibility"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_scot_who_pays": {
+      "url": "https://www.gov.uk/scottish-income-tax/who-pays",
+      "label": {
+        "en": "GOV.UK, Income Tax in Scotland: who pays"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_cash_who": {
+      "url": "https://www.gov.uk/simpler-income-tax-cash-basis/who-can-use-cash-basis",
+      "label": {
+        "en": "GOV.UK, Cash basis: who can use it"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_directors": {
+      "url": "https://www.gov.uk/employee-directors",
+      "label": {
+        "en": "GOV.UK, Employee directors"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_ltd_money": {
+      "url": "https://www.gov.uk/running-a-limited-company/taking-money-out-of-a-limited-company",
+      "label": {
+        "en": "GOV.UK, Running a limited company: taking money out"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_cest": {
+      "url": "https://www.gov.uk/guidance/check-employment-status-for-tax",
+      "label": {
+        "en": "HMRC, Check employment status for tax (CEST)"
+      },
+      "retrieved": "2026-10-15"
+    },
+    "gov_sl_plan": {
+      "url": "https://www.gov.uk/repaying-your-student-loan/which-repayment-plan-you-are-on",
+      "label": {
+        "en": "GOV.UK, Repaying your student loan: which plan you are on"
+      },
+      "retrieved": "2026-10-15"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+---
+/**
+ * Home: the 2026/27 bill first (RECETTE §5), then the bill taken apart as a tax computation, the
+ * England-or-Scotland ledger at eight profits, the dates that follow from it (payments on account,
+ * Making Tax Digital), the company question as a curve, then the directory of pages. Every figure is
+ * computed by the engine from the parameter file.
+ */
+import PageLayout from '../layouts/PageLayout.astro';
+import Clamp from './Clamp.astro';
+import Tool from './Tool.astro';
+import { route } from '../i18n/routes';
+import { groupLabel, GROUPS_ORDER } from '../i18n/nav';
+import { PAGES } from '../lib/guides';
+import { helpers } from '../lib/helpers';
+import { P } from '../lib/engine/params';
+import { LAST_UPDATED } from '../data/site-config';
+import { displayDate } from '../lib/format';
+import { websiteSchema, organizationSchema, faqSchema, webApplicationSchema } from '../lib/seo';
+import * as E from '../lib/engine/tax';
+const lang = 'en';
+const h = helpers(true);
+const { m, pc, table } = h;
+const ty = P.taxYear;
+const se = (profit: number, region: E.Region = 'ruk') => E.selfEmployed({ profit, region });
+const ex = se(42000 - 6000);
+const ladder = [15000, 25000, 35000, 45000, 60000, 80000, 110000, 150000].map((p) => {
+  const a = se(p), b = se(p, 'scotland');
+  return [m(p), m(a.it.tax), m(b.it.tax), m(a.class4.total), m(a.takeHome), m(b.takeHome), `${b.takeHome >= a.takeHome ? '+' : '−'}${m(Math.abs(b.takeHome - a.takeHome))}`];
+});
+const ladderHtml = table(['Profit', 'Income Tax rUK', 'Income Tax Scotland', 'Class 4 (both)', 'Kept rUK', 'Kept Scotland', 'Scotland vs rUK'], ladder, `Sole trader with no other income, ${ty}. Computed by the site's engine from the HMRC and Scottish Government bands.`, ['r', 'r', 'r', 'r', 'r', 'r', 'r']);
+const breakEven = (() => { for (let p = 13000; p < 100000; p += 50) if (se(p, 'scotland').it.tax > se(p).it.tax) return p; return null; })();
+const ruk = P.incomeTax.ruk.bands, sco = P.incomeTax.scotland.bands, PA = P.incomeTax.personalAllowance;
+// Bands are held as taxable income; shown here as income with the standard allowance. The last
+// limit (£125,140) is already an income figure: the allowance is gone by then.
+const top = (u: number) => (u >= 125140 ? u : PA + u);
+const bandRows = (bands: typeof sco) => { let from = PA + 1; return bands.map((b) => { const r = [b.name, b.upTo ? `${m(from)} to ${m(top(b.upTo))}` : `over ${m(from - 1)}`, pc(b.rate)]; if (b.upTo) from = top(b.upTo) + 1; return r; }); };
+const bandsHtml = `<div class="grid gap-6 md:grid-cols-2">${table(['England, Wales, NI', 'Income', 'Rate'], bandRows(ruk), 'With the standard Personal Allowance.', ['l', 'l', 'r'])}${table(['Scotland', 'Income', 'Rate'], bandRows(sco), 'Non-savings income only.', ['l', 'l', 'r'])}</div>`;
+const first = se(35000);
+const wagesCase = E.selfEmployed({ profit: 12000, employment: 30000, region: 'ruk' });
+const cmp = [30000, 50000, 80000, 120000].map((p) => { const c = E.compareStructures({ profit: p, region: 'ruk' }); const half = E.compareStructures({ profit: p, region: 'ruk', drawShare: 0.5 });
+  return [m(p), m(c.soleTakeHome), m(c.ltdAll.takeHome), `${c.gapAllDrawn >= 0 ? '+' : '−'}${m(Math.abs(c.gapAllDrawn))}`, m(half.ltd.takeHome), m(half.ltd.retained)]; });
+const cmpHtml = table(['Profit', 'Sole trader keeps', 'Company, all paid out', 'Difference', 'Company, half paid out: cash', '…and left in the company'], cmp, `England, Wales or Northern Ireland, ${ty}, one director, best salary found by the engine.`, ['r', 'r', 'r', 'r', 'r', 'r']);
+const mtdRows = P.mtd.stages.map((s) => [`Over ${m(s.threshold)}`, s.basisYear, h.date(s.start)]);
+const mtdHtml = table(['Qualifying income', 'Tax year HMRC looks at', 'Quarterly updates from'], mtdRows, 'Qualifying income is turnover from self-employment plus gross rents, before expenses.', ['l', 'l', 'l']);
+const title = 'Self-Employed Tax Calculator 2026/27 UK, Scotland Included';
+const description = `Self-employed tax for ${ty}: Income Tax for rUK and Scotland, Class 4, student loans, payments on account and your Making Tax Digital date. No email asked.`;
+const resume = `A sole trader in England, Wales or Northern Ireland with ${m(36000)} of profit in ${ty} owes ${m(ex.it.tax)} of Income Tax and ${m(ex.class4.total)} of Class 4 National Insurance, ${m(ex.saBill)} in all, which means putting aside about ${pc(Math.round(ex.setAside * 1000) / 1000)} of every pound of profit. The calculator below does that sum for your own figures: it takes turnover and expenses, applies the Personal Allowance of ${m(PA)} and its taper above ${m(P.incomeTax.taperStart)}, the English or Scottish bands, Class 4 at ${pc(P.class4.mainRate)} and ${pc(P.class4.upperRate)}, any student or postgraduate loan, and wages from a job taxed first through PAYE. It then gives the dates: the 31 January and 31 July payments of your first year and, from your turnover, whether Making Tax Digital for Income Tax applies to you from April 2026, 2027 or 2028. Nothing is sent anywhere, there is no email to leave and no cap on the profit you can type.`;
+const faqs = [
+  { q: 'How much tax does a self-employed person pay in 2026/27?', a: `Income Tax on profit above the ${m(PA)} Personal Allowance, at 20 %, 40 % and 45 % in England, Wales and Northern Ireland or at six Scottish rates from 19 % to 48 %, plus Class 4 National Insurance of ${pc(P.class4.mainRate)} between ${m(P.class4.lowerProfitsLimit)} and ${m(P.class4.upperProfitsLimit)} and ${pc(P.class4.upperRate)} above. On ${m(30000)} of profit that is ${m(se(30000).saBill)} in rUK.` },
+  { q: 'Do I still pay Class 2 National Insurance?', a: `No. Since April 2024 Class 2 is not charged. With profit of ${m(P.class2.smallProfitsThreshold)} or more in ${ty} the year counts for your State Pension as if you had paid; below that you can pay ${h.m2(P.class2.weeklyRate)} a week voluntarily to keep the year. Calculators that still add Class 2 to the bill overstate it.` },
+  { q: 'How much should I put aside from each payment?', a: `Divide your expected Self Assessment bill by your profit. For a sole trader with no other income that is ${pc(se(25000).setAside)} at ${m(25000)} of profit, ${pc(se(45000).setAside)} at ${m(45000)} and ${pc(se(70000).setAside)} at ${m(70000)}. In your first year add half as much again for the first payment on account due the same January.` },
+  { q: 'When do I pay the tax for 2026/27?', a: 'By 31 January 2028, together with the first payment on account for 2027/28 if one is due, and the second payment on account by 31 July 2028. The online return for 2026/27 is due by 31 January 2028 as well; a paper return by 31 October 2027.' },
+  { q: 'Is Scottish self-employed tax higher?', a: `It depends on the profit. Up to about ${breakEven ? m(breakEven) : 'the low thirty thousands'} a Scottish sole trader pays slightly less Income Tax, thanks to the 19 % starter rate, and more above it, because the higher rate of 42 % starts at ${m(PA + (sco[2].upTo as number) + 1)} instead of ${m(PA + (ruk[0].upTo as number) + 1)}. Class 4 is the same across the UK.` },
+  { q: 'Does this calculator work if I also have a job?', a: `Yes. Type the salary in “wages from a job”: the calculator taxes it first, as PAYE does, and shows only what Self Assessment collects on top. With ${m(30000)} of wages and ${m(12000)} of profit, the bill is ${m(wagesCase.saBill)}, all of it at the basic rate plus Class 4.` },
+  { q: 'Do I need Making Tax Digital in 2026/27?', a: `Only if your 2024/25 return showed qualifying income over ${m(P.mtd.stages[0].threshold)}: self-employed turnover plus gross rents, before expenses. Over ${m(P.mtd.stages[1].threshold)} in 2025/26 brings you in from April 2027, and over ${m(P.mtd.stages[2].threshold)} in 2026/27 from April 2028. HMRC writes to people it expects to join, but the duty to check and sign up is yours.` },
+];
+const jsonLd = [websiteSchema(lang), organizationSchema(lang), webApplicationSchema({ name: `Self-employed tax calculator ${ty}`, description, path: route('home', lang), lang }), faqSchema(faqs, lang)];
+const sources = (['gov_income_tax_rates', 'gov_scottish_income_tax', 'gov_employers_2627', 'gov_se_nic', 'gov_student_loan_repay', 'gov_payments_on_account', 'gov_mtd_when', 'gov_dividends', 'gov_ct_rates_pub'] as const).map((k) => ({ name: P.sources[k].label.en, url: P.sources[k].url }));
+const groups = GROUPS_ORDER.map((g) => ({ g, pages: PAGES.filter((p) => p.group === g) })).filter((x) => x.pages.length);
+---
+<PageLayout title={title} description={description} lang={lang} jsonLd={jsonLd} faqs={faqs} sources={sources}>
+  <header class="mb-2">
+    <h1 class="text-[1.7rem] font-bold leading-tight text-navy-900 sm:text-3xl md:text-4xl">Self-employed tax calculator {ty}</h1>
+    <p class="mt-2 text-navy-700">Your Self Assessment bill, what to put aside and when to pay, for England, Wales, Northern Ireland and Scotland. No email, no profit cap.</p>
+    <p data-chrome class="mt-1 text-sm text-navy-600">{ty} rates read on GOV.UK · <a class="underline" href={route('method', lang)}>how we calculate</a> · <a class="underline" href={route('about', lang)}>about us</a></p>
+  </header>
+  <Clamp text={resume} id="clamp-home" class="mb-3" />
+  <div data-outil class="mb-6"><Tool tool={{ kind: 'se' }} primary={true} /></div>
+  <div class="prose prose-slate max-w-none">
+    <h2>The bill, line by line</h2>
+    <p>HMRC builds a self-employed bill in four steps, and the calculator follows the same order. First the profit: turnover less the costs that are wholly for the business, or less the {m(P.tradingAllowance.amount)} <a href={route('trading-allowance', lang)}>trading allowance</a> when that is bigger. Then Income Tax on the profit and any other income, after the Personal Allowance. Then Class 4 National Insurance, which is worked out on the profit alone, never on wages or dividends. Last, any student loan repayment, which HMRC adds to the same Self Assessment statement. The total is due on 31 January after the tax year ends, and from the second year part of the next bill is collected in advance.</p>
+    <p>The bands that apply to the profit depend on where you live, not where your customers are:</p>
+    <div data-chrome><Fragment set:html={bandsHtml} /></div>
+    <p>The Personal Allowance shrinks by £1 for every £2 of income over {m(P.incomeTax.taperStart)} and is gone at {m(125140)}. Between those two figures each extra £100 of profit costs {pc(E.marginalOnProfit({ profit: 110000, region: 'ruk' }))} in tax and Class 4 in England, Wales and Northern Ireland, and {pc(E.marginalOnProfit({ profit: 110000, region: 'scotland' }))} in Scotland: the <a href={route('personal-allowance-taper', lang)}>£100,000 trap</a> page shows how a pension contribution gets the allowance back.</p>
+    <h2>Why your postcode changes the answer</h2>
+    <p>Most calculators that rank for this search apply the English bands to everyone. Scotland sets its own rates and bands for income from work and business, so the same profit gives two different bills. The gap is small at low profits and grows quickly once the Scottish higher rate starts. The table puts the two side by side for a sole trader with nothing else coming in:</p>
+    <div data-chrome><Fragment set:html={ladderHtml} /></div>
+    <p>{breakEven ? `The crossing point is about ${m(breakEven)} of profit: below it the Scottish starter rate makes Scotland marginally cheaper, above it the intermediate and higher rates take over.` : ''} Class 4 and student loan thresholds are UK-wide, and dividends are taxed at UK rates wherever you live, which matters when you compare a <a href={route('limited-company-vs-sole-trader', lang)}>limited company</a> with staying a sole trader. A full page on <a href={route('self-employed-tax-scotland', lang)}>Scottish self-employed tax</a> takes the Scottish bands one at a time.</p>
+    <h2>Class 2 has gone; Class 4 has not</h2>
+    <p>Many people still budget for Class 2 because older guides and some calculators still charge it. Nobody has had to pay it since April 2024. If your profit is {m(P.class2.smallProfitsThreshold)} or more, HMRC treats the {ty} year as paid for your State Pension record. Below that you can choose to pay {h.m2(P.class2.weeklyRate)} a week, {m(P.class2.weeklyRate * P.class2.weeks)} for the year, to keep a qualifying year. Class 4 remains, at {pc(P.class4.mainRate)} on profit between {m(P.class4.lowerProfitsLimit)} and {m(P.class4.upperProfitsLimit)} and {pc(P.class4.upperRate)} above. The <a href={route('class-4-national-insurance', lang)}>Class 4 calculator</a> and the <a href={route('class-2-national-insurance', lang)}>Class 2 guide</a> go into the detail.</p>
+    <h2>A job and a business at the same time</h2>
+    <p>If you are employed as well, your salary is taxed first through PAYE and uses your Personal Allowance and the lower bands. The profit then sits on top, often entirely in the basic or higher rate, which is why a modest side income can produce a bill out of proportion to it. Class 4 is still charged on the profit alone. With {m(30000)} of wages and {m(12000)} of profit, Self Assessment collects {m(wagesCase.itViaSA)} of Income Tax and {m(wagesCase.class4.total)} of Class 4, so {pc(wagesCase.saBill / 12000)} of the side profit goes to HMRC. The <a href={route('employed-and-self-employed', lang)}>employed and self-employed page</a> has a calculator for exactly that case.</p>
+    <h2>The first January is the expensive one</h2>
+    <p>Payments on account catch out almost every new sole trader. When your Self Assessment bill is {m(P.paymentsOnAccount.minBill)} or more and less than {pc(P.paymentsOnAccount.atSourceShare)} of your tax was taken at source, HMRC asks for the next year's tax in advance, in two halves on 31 January and 31 July. In the first year nothing has been paid in advance, so the first January carries one and a half years of tax. A sole trader who starts in {ty} with {m(35000)} of profit owes {m(first.saBill)} for the year: on 31 January 2028 the payment is {m(first.saBill + first.poaEach)}, then {m(first.poaEach)} on 31 July 2028. If your profit falls, you can ask HMRC to reduce them. The <a href={route('payments-on-account', lang)}>payments on account calculator</a> handles later years, with the balancing payment.</p>
+    <h2>Making Tax Digital: three thresholds, three dates</h2>
+    <p>Making Tax Digital for Income Tax has been compulsory since 6 April 2026 for the largest sole traders and landlords. It does not change how much tax you pay, only how you report it: digital records kept in compatible software, a summary sent to HMRC every quarter, and the return filed from the same software. Whether you are in depends on qualifying income, which is turnover, not profit:</p>
+    <div data-chrome><Fragment set:html={mtdHtml} /></div>
+    <p>So a plumber with {m(55000)} of sales and {m(25000)} of costs is in from April 2026 even though the profit is only {m(30000)}. The calculator above reads your turnover and tells you which threshold it crosses; the <a href={route('making-tax-digital', lang)}>Making Tax Digital checker</a> takes the three years in turn, including rents, and lists your <a href={route('mtd-quarterly-deadlines', lang)}>quarterly deadlines</a>.</p>
+    <h2>Sole trader or limited company in {ty}?</h2>
+    <p>The usual advice, incorporate once profit passes £30,000 to £50,000, dates from years when dividends were taxed at 7.5 % and Corporation Tax was a flat 19 %. In {ty} dividends are taxed at {pc(P.dividends.basic)} and {pc(P.dividends.higher)}, and Corporation Tax rises from {pc(P.corporationTax.smallRate)} to {pc(P.corporationTax.mainRate)} above {m(P.corporationTax.lowerLimit)}. A one-person company that pays everything out as salary and dividends now leaves less cash than a sole trader at most profits in England, Wales and Northern Ireland. What still favours the company is profit left inside it, taxed only at the Corporation Tax rate until you take it out:</p>
+    <div data-chrome><Fragment set:html={cmpHtml} /></div>
+    <p>That is why the <a href={route('limited-company-vs-sole-trader', lang)}>comparison calculator</a> draws the gap as a curve across every level of profit, for everything paid out and for the share you choose to leave in the company, and lets you add the cost of running a company. It does not stop at {m(50000)}.</p>
+    <h2>Putting the right amount aside</h2>
+    <ol>
+      <li>Open a separate savings account for tax and move a fixed share of every payment you receive into it the day it arrives. The calculator's "put aside" figure is that share.</li>
+      <li>In your first year, add the first payment on account: roughly another half of the year's bill falls due on the same 31 January.</li>
+      <li>Revisit the figure when your profit moves by more than a few thousand pounds, and above all near {m(P.class4.upperProfitsLimit)}, {m(P.incomeTax.taperStart)} and, in Scotland, {m(PA + (sco[2].upTo as number) + 1)}, where the rate jumps.</li>
+      <li>Keep records as you go. From the year Making Tax Digital applies to you, your software will show an estimate after each quarterly update.</li>
+      <li>If you pay into a personal pension, the relief changes the bill: try the <a href={route('pension-tax-relief-self-employed', lang)}>pension relief calculator</a>.</li>
+    </ol>
+    <h2>Every page by profit and by subject</h2>
+    <div data-chrome data-sommaire class="not-prose grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {groups.map(({ g, pages }) => (<div><h3 class="mb-2 font-serif text-lg font-semibold text-navy-900">{groupLabel(g)}</h3><ul class="space-y-1 text-sm">{pages.map((p) => <li><a class="text-navy-800 underline decoration-navy-300 hover:text-accent-700" href={route(p.id, lang)}>{p.nav}</a></li>)}</ul></div>))}
+    </div>
+    <h2>How far to trust the figure</h2>
+    <p>The engine reproduces the worked examples GOV.UK publishes and is tested on every build, and each rate links to the page it was read on. It still makes assumptions: a standard tax code on any wages, an accounting year from 6 April to 5 April, no losses brought forward, no savings interest or capital gains. Your real bill is the one HMRC calculates from your return. The <a href={route('method', lang)}>method page</a> lists every rule applied and every rule left out.</p>
+    <p class="text-sm text-navy-700">This site does better than the first Google result because it gives the whole {ty} bill at once, with no email and no profit cap: Scotland included, Class 4, student loans and payments on account, linked to the date Making Tax Digital reaches you, and the sole trader versus limited company gap across every level of profit. Sources read on <time datetime={LAST_UPDATED}>{displayDate(LAST_UPDATED, 'en-GB')}</time>.</p>
+  </div>
+</PageLayout>

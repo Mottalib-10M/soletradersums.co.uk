@@ -1,0 +1,20 @@
+---
+/** Embeddable calculator (iframe): no navigation, noindex, out of the sitemap (astro.config). */
+import '../../styles/global.css';
+import SECalc from '../../components/calc/SECalc';
+import { SITE_URL, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Self-employed tax calculator 2026/27 (widget)</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={`${SITE_URL}/en/`} />
+  </head>
+  <body class="bg-white p-2 text-navy-900">
+    <SECalc client:load methodHref={`${SITE_URL}${route('method', 'en')}`} mtdHref={`${SITE_URL}${route('making-tax-digital', 'en')}`} poaHref={`${SITE_URL}${route('payments-on-account', 'en')}`} />
+    <p class="mt-2 text-center text-xs text-navy-600"><a href={`${SITE_URL}/en/`} target="_blank" rel="noopener" class="underline">{SITE_NAMES.en}</a> · 2026/27 rates read on GOV.UK, worked out in your browser</p>
+  </body>
+</html>

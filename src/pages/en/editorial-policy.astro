@@ -1,0 +1,26 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { AUTHOR_NAME, CONTACT_EMAIL, LAST_UPDATED, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+const lang = 'en';
+---
+<PageLayout title={`Editorial policy of ${SITE_NAMES[lang]}: tax sources and fixes`} description="Which sources Sole Trader Sums accepts for a UK tax rate, which it refuses, how the tax engine is tested before each build, when the rates are re-read and how a wrong figure is corrected." lang={lang} noindex={true} breadcrumbs={[{ label: 'Editorial policy' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Editorial and corrections policy</h1>
+    <p>People decide how much to put aside, whether to incorporate and which contract to sign from these numbers. A wrong rate costs real money, so every figure points to the official page it came from and a correction is made in the open.</p>
+    <h2>Who is responsible</h2><p>{AUTHOR_NAME}, reachable at <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+    <h2>Sources we use</h2>
+    <ul>
+      <li><strong>GOV.UK</strong> guides and <strong>HMRC</strong> publications: rates and allowances, rates and thresholds for employers, Making Tax Digital guidance, Self Assessment deadlines and penalties;</li>
+      <li><strong>HMRC internal manuals</strong> where the guide is silent, for example the Employment Status Manual on the size of an IR35 client;</li>
+      <li><strong>legislation.gov.uk</strong> for the text of the law behind a rule, such as the Personal Allowance taper or Corporation Tax marginal relief;</li>
+      <li>the <strong>Scottish Government</strong> (mygov.scot, gov.scot) alongside GOV.UK for Scottish Income Tax.</li>
+    </ul>
+    <h2>Sources we refuse</h2><p>Accountancy firms' blogs, banks' guides, software vendors' pages and other calculators never supply a figure here, however well they rank. In October 2026 several of them still charged Class 2 National Insurance or used last year's dividend rates. An announcement in a Budget is not used until GOV.UK publishes the rate for the year it applies to.</p>
+    <h2>Testing</h2><p>The tax engine runs a test suite on every build: worked examples published on GOV.UK, the thresholds on both sides of each limit, and hand-checked cases for Scotland, the £100,000 taper and companies. A failing test stops the build, so a broken calculation cannot be published.</p>
+    <h2>Review cycle</h2><p>The parameter file is re-read in full each April for the new tax year, after each Budget, and whenever HMRC updates a guide we cite. Each page shows the date its sources were last read.</p>
+    <h2>Corrections</h2>
+    <ol><li>We open the official source again.</li><li>We correct the parameter file or the engine, and add a test for the case.</li><li>The pages rebuild from the corrected engine and show the new date.</li></ol>
+    <h2>Independence</h2><p>No firm, bank or software company pays for or reviews what we publish, and the site carries no affiliate link. If a commercial relationship ever existed, it would be stated on the page concerned. See also the <a href={route('method', lang)}>method</a>. Version: {LAST_UPDATED}.</p>
+  </div>
+</PageLayout>

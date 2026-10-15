@@ -1,0 +1,16 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { CONTACT_EMAIL, LAST_UPDATED, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+const lang = 'en';
+---
+<PageLayout title={`Cookies on ${SITE_NAMES[lang]}: none set, and how to check`} description="Cookies on Sole Trader Sums: none on any page. The figures you type are not stored on your device or sent anywhere, and the optional stability monitoring runs without cookies." lang={lang} noindex={true} breadcrumbs={[{ label: 'Cookies' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Cookies</h1>
+    <p>This page completes the <a href={route('privacy', lang)}>privacy policy</a>. You can check all of it in your browser's developer tools, under Storage or Application.</p>
+    <h2>No cookies</h2><p>No page sets a cookie and the calculators keep nothing on your device: close the tab and your figures are gone, unless you copied the link that carries them. There is no consent banner because there is nothing to consent to.</p>
+    <h2>Stability monitoring without cookies</h2><p>When it is switched on, Microsoft Clarity runs in cookie-free mode: no <code>_clck</code>, <code>_clsk</code>, <code>MUID</code> or <code>CLID</code> cookie, a one-off identifier per page view, page text and inputs masked.</p>
+    <h2>Blocking it</h2><p>Blocking clarity.ms, or using any content blocker, stops it; every calculator keeps working.</p>
+    <p>Questions: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Updated: {LAST_UPDATED}.</p>
+  </div>
+</PageLayout>
