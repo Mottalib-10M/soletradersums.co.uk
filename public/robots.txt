@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /*?*
 
-Sitemap: https://uk-self-employed.example/sitemap-index.xml
+Sitemap: https://soletradersums.co.uk/sitemap-index.xml

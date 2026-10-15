@@ -1,5 +1,5 @@
 /** Configuration centrale du site (générée par new-site.py). */
-export const SITE_URL = "https://uk-self-employed.example";
+export const SITE_URL = "https://soletradersums.co.uk";
 export const SITE_NAMES: Record<string, string> = {"en": "Sole Trader Sums"};
 export const LANG_TAGS: Record<string, string> = {"en": "en-GB"};
 export const OG_LOCALES: Record<string, string> = {"en": "en_GB"};
@@ -16,7 +16,7 @@ export const AUTHOR_DESC: Record<string, string> = {"en": "Radif Partners writes
  *  themes reellement traites par le site, pas une liste de mots-cles : un sujet
  *  declare ici sans page qui le couvre est une declaration fausse. */
 export const KNOWS_ABOUT: Record<string, string[]> = {"en": ["Self-employed Income Tax in the UK", "Scottish Income Tax", "Class 2 and Class 4 National Insurance", "Making Tax Digital for Income Tax", "Payments on account", "Sole trader versus limited company", "Dividend and Corporation Tax", "Off-payroll working (IR35)"]};
-export const CONTACT_EMAIL = "contact@uk-self-employed.example";
+export const CONTACT_EMAIL = "contact@soletradersums.co.uk";
 export const THEME_COLOR = '#8A1538';
 export const LOGO_SYMBOL = 'ST';
 export const BING_VERIFY_CODE = '';
