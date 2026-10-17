@@ -1,7 +1,7 @@
 ---
 import PageLayout from '../../layouts/PageLayout.astro';
 import LegalIdentity from '../../components/LegalIdentity.astro';
-import { AUTHOR_NAME, CONTACT_EMAIL, LAST_UPDATED, LEGAL, SITE_NAMES, SITE_URL } from '../../data/site-config';
+import { AUTHOR_NAME, CLARITY_ID, CONTACT_EMAIL, GA4_ID, LAST_UPDATED, LEGAL, SITE_NAMES, SITE_URL } from '../../data/site-config';
 import { route } from '../../i18n/routes';
 const lang = 'en';
 ---
@@ -22,7 +22,10 @@ const lang = 'en';
     <p>Each rate is read on the official page cited with it and the engine is tested, without any guarantee that no error or later change remains. The publisher cannot be held liable for a decision, a payment, a penalty or a choice of business structure based only on this site. Errors can be reported on the <a href={route('contact', lang)}>contact</a> page.</p>
     <h2>Intellectual property and reuse</h2>
     <p>Texts, graphics and code belong to the publisher. Rates and rules published on GOV.UK and legislation.gov.uk are public sector information reused under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="nofollow noopener">Open Government Licence v3.0</a>, with the source named on each page.</p>
-    <h2>Personal data</h2><p>The calculators run in your browser, no cookie is set and the publisher keeps no personal data; see the <a href={route('privacy', lang)}>privacy policy</a> and <a href={route('cookies', lang)}>cookies</a>.</p>
+    {/* gen-legal-pages:terms */}
+    <h2>Personal data and cookies</h2>
+    {GA4_ID ? (<p>What you type in the calculators stays in your browser. The site sets Google Analytics audience measurement cookies (<code>_ga</code>, <code>_ga_{GA4_ID.replace('G-', '')}</code>, 13 months at most), with no advertising{CLARITY_ID && '; page stability is monitored with Microsoft Clarity, cookie-free'}. Details, legal basis and how to object: <a href={route('privacy', lang)}>privacy policy</a> and <a href={route('cookies', lang)}>cookies</a> page.</p>) : (<p>What you type in the calculators stays in your browser and the site sets no cookies{CLARITY_ID && '; page stability is monitored anonymously with Microsoft Clarity, cookie-free'}. See the <a href={route('privacy', lang)}>privacy policy</a> and the <a href={route('cookies', lang)}>cookies</a> page.</p>)}
+    {/* /gen-legal-pages:terms */}
     <h2>Reporting unlawful content</h2><p><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>, with the page address and the reason.</p>
     <h2>Governing law</h2><p>French law. Failing an amicable solution, the courts of {LEGAL.jurisdiction} have jurisdiction, without prejudice to the mandatory rules protecting consumers in their country of residence. Updated: {LAST_UPDATED}.</p>
   </div>
